@@ -1,8 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+using MSIT147API.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers
+
+builder.Services.AddControllers().AddXmlSerializerFormatters();
+
+builder.Services.AddDbContext<NorthwindContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("NorthwindConnection"))
+    );
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
