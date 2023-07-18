@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MSIT147API.Models;
+using MSIT147API.Models.DTO;
 
 namespace MSIT147API.Controllers
 {
@@ -29,6 +30,25 @@ namespace MSIT147API.Controllers
               return NotFound();
           }
             return await _context.Products.ToListAsync();
+        }
+        // GET: api/Products/datatables
+        [HttpGet]
+        [Route("DataTables")]
+        public async Task<ActionResult<DataTablesProductDTO>> GetProductsForDataTables()
+        {
+            var productsMin = await _context.Products.Select(p => new ProductsMinDTO
+            {
+                ProductId = p.ProductId,
+                ProductName = p.ProductName,
+                UnitPrice= p.UnitPrice,
+                UnitsInStock = p.UnitsInStock,
+            }).ToListAsync();
+
+            DataTablesProductDTO _datatableDTO = new DataTablesProductDTO();
+            _datatableDTO.data = productsMin;
+
+
+            return _datatableDTO;
         }
 
         // GET: api/Products/5
